@@ -1,0 +1,17 @@
+[
+    {
+        "amount": 800,
+        "category": "food",
+        "description": "bread"
+    },
+    {
+        "amount": 300,
+        "category": "toiletries",
+        "description": "Tissue roll"
+    },
+    {
+        "amount": 100,
+        "category": "food",
+        "description": "seasoning"
+    }
+]
