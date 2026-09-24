@@ -3,11 +3,38 @@ Expense Tracker
 ## Goal 
 Build a terminal application that allows a user to record and analyze personal expenses. 
 
+=================================
 what is the workflow
 the outcome
 what does it mean to record and analyze
 define an expense
 how do i prompt a user for inputs from the terminal in python
+
+## myflow/program design
+- program starts
+- load expenses
+- show USERMENU ask user for next action to take (to add expense, delete expense, view all expenses, cal by category)
+
+- if to add expense:
+- ask for amt, category, description
+- save to file
+- reply "expense added"
+- show USERMENU
+
+- if view expenses:
+- show list of expenses
+- show total spending
+- show USERMENU
+
+- if delete an expense:
+- ask for expense desc
+
+- if cal by category:
+
+
+
+
+=====================================
 
 ## Core Features 
 - Add an expense (what does it mean it "add" an expense. needs precision)
@@ -15,7 +42,7 @@ how do i prompt a user for inputs from the terminal in python
 - Specify category
 - Add a description
 - View all expenses
-Calculate total spending
+- Calculate total spending
 Calculate spending by category
 Delete an expense
 - Save expenses to a file

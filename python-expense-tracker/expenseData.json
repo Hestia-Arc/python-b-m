@@ -1,17 +1,22 @@
 [
     {
-        "amount": 800,
+        "amount": 500,
         "category": "food",
         "description": "bread"
     },
     {
-        "amount": 300,
+        "amount": 800,
         "category": "toiletries",
-        "description": "Tissue roll"
+        "description": "tissue roll"
     },
     {
-        "amount": 100,
+        "amount": 400,
         "category": "food",
-        "description": "seasoning"
+        "description": "milk"
+    },
+    {
+        "amount": 30,
+        "category": "food",
+        "description": "sugar"
     }
 ]
