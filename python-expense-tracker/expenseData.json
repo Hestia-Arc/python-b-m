@@ -1,20 +1,23 @@
 [
     {
-        "id": "a3d3e876-cda8-4339-ae10-64b2cc85ab2b",
-        "amount": 5600,
-        "category": "Grocer",
-        "description": "Beans"
+        "id": "daf1aa34-f105-4bae-a192-2873b82ccd2d",
+        "amount": 500,
+        "category": "Book",
+        "description": "B2b",
+        "createdAt": "2026-09-28 15:20:24"
     },
     {
-        "id": "b1bcdf85-4f0e-451a-84a2-b8cefde56217",
-        "amount": 400,
-        "category": "Transport",
-        "description": "Bike"
+        "id": "9419397c-d4ec-43b1-99dc-329aa3a23ce2",
+        "amount": 3500,
+        "category": "Goods",
+        "description": "Rice",
+        "createdAt": "2026-09-28 15:21:05"
     },
     {
-        "id": "223a3b89-7629-42e7-a690-9dc2ad31f896",
-        "amount": 300,
-        "category": "Transportttuyrttvd",
-        "description": "Papaer"
+        "id": "8468ca95-2bea-43a3-9dc1-68c3f5684f64",
+        "amount": 200,
+        "category": "Book",
+        "description": "Pens",
+        "createdAt": "2026-09-28 15:33:52"
     }
 ]

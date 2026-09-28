@@ -1,6 +1,7 @@
 import os
 import json
 import uuid
+from datetime import datetime
 
 # ======================
 #  LOAD USER
@@ -131,7 +132,8 @@ def addExpense():
         "id": str(uuid.uuid4()),
         "amount": expenseAmt,
         "category": expenseCat.capitalize(),
-        "description": expenseDesc.capitalize()
+        "description": expenseDesc.capitalize(),
+        "createdAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
 
     # save to a file
@@ -145,21 +147,20 @@ def addExpense():
 # ======================
 # DELETE EXPENSE
 # ======================
-def deleteExpense(expenseDesc):
+def deleteExpense(expenseIdx):
 
     with open("expenseData.json", "r") as file:
         data = json.load(file)
 
-        expenseList = len(data)
-        data = [expense for expense in data if expense.get("description") != expenseDesc]
+    if expenseIdx < 0 or expenseIdx >= len(data):
+        return "Expense not found."
 
-        if len(data) == expenseList:
-            return "Expense not found."
+    deletedExpense = data.pop(expenseIdx)
 
-        with open("expenseData.json", "w") as file:
-            json.dump(data, file, indent=4)
+    with open("expenseData.json", "w") as file:
+        json.dump(data, file, indent=4)
 
-    return "Expense deleted."
+    return f"{deletedExpense['description']} deleted."
 
 
 # ======================
@@ -175,8 +176,21 @@ def viewAllExpenses():
 # ======================
 # CAL BY CATEGORY
 # ======================
-def calByCategory():
-    return "Calculated."
+def calByCategory(category):
+    with open("expenseData.json", "r") as file:
+        data = json.load(file)
+
+    category_name = category.strip().lower()
+    filtered = [
+        expense for expense in data
+        if expense.get("category", "").strip().lower() == category_name
+    ]
+
+    if not filtered:
+        return f"No expenses found for category: {category}."
+
+    total = sum(expense["amount"] for expense in filtered)
+    return f"Total for {category}: {total}"
 
 
 # PROGRAM BEGINS
@@ -197,24 +211,44 @@ def main():
         print("4. Calculate by category")
         print("5. Exit")
 
-        choice = int(input("\nEnter your choice: "))
+        try:
+            choice = int(input("\nEnter your choice: "))
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
 
         if choice == 1:
             print(addExpense())
 
         elif choice == 2:
-            expenseToDelete = input("Specify expense description: ")
-            print(deleteExpense(expenseToDelete))
+            try:
+                expenseIndex = int(input("Enter expense index: "))
+            except ValueError:
+                print("Please enter a valid number.")
+                continue
+
+            if expenseIndex < 1:
+                print("Please enter a valid number.")
+                continue
+
+            print(deleteExpense(expenseIndex - 1))
 
         elif choice == 3:
             viewAllExpenses()
 
         elif choice == 4:
-            print(calByCategory())
+            categoryName = input("Enter category: ").strip()
+            if not categoryName:
+                print("Category cannot be empty.")
+                continue
+            print(calByCategory(categoryName))
 
         elif choice == 5:
             print("\nShutting down...")
             break
+
+        else:
+            print("Please enter a valid number.")
 
 
 
