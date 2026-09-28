@@ -1,57 +1,30 @@
 import os
 import json
+import uuid
 
-# check user when program starts
-if os.path.exists("user.json"):
-    with open("user.json", "r") as file:
-        userData = json.load(file)
+# ======================
+#  LOAD USER
+# ======================
+def loadUser():
+    if os.path.exists("user.json"):
+        with open("user.json", "r") as file:
+            userData = json.load(file)
 
-    print(f"Welcome back, {userData['name']}\n")
+        print(f"Welcome back, {userData['name']}\n")
+    
+    else:
+        name = input("Enter your name: ")
+        role = input("Your occupation: ")
 
-else:
-    name = input("Enter your name: ")
-    role = input("Your occupation: ")
+        user = {
+            "name": name,
+            "role": role
+        }
 
-    user = {
-        "name": name,
-        "role": role
-    }
+        with open("user.json", "w") as file:
+            json.dump(user, file, indent=4)
 
-    with open("user.json", "w") as file:
-        json.dump(user, file, indent=4)
-
-    print(f"\nWelcome, {user['name']}!\n")
-
-# load expense when program starts
-if os.path.exists("expenseData.json"):
-    try:
-        with open("expenseData.json", "r") as file:
-            data = json.load(file)
-            
-            print("Loading expenses...\n")
-            print("-----------------------------------")
-            print("| DESC  |   AMOUNT   |   CATEGORY |")
-            print("-----------------------------------")
-
-
-        for expense in data:
-            # print(f"{expense['desc']}")
-            print(f"{expense['description']}---{expense['amount']}---{expense['category']} ")
-            print(f"----------------------")
-
-        print(f"TOTAL: {sum(expense['amount'] for expense in data)}")
-
-    except json.JSONDecodeError:
-        print("Invalid json")
-
-else:
-    data = []
-
-    with open("expenseData.json", "w") as file:
-        json.dump(data, file, indent=4)
-
-        print("No expense found.\n")
-
+        print(f"\nWelcome, {user['name']}!\n")
 
 # ======================
 # ADD EXPENSE
@@ -102,6 +75,7 @@ def addExpense():
             print("Description cannot be empty")
 
     expense = {
+        "id": str(uuid.uuid4),
         "amount": expenseAmt,
         "category": expenseCat,
         "description": expenseDesc
@@ -119,8 +93,21 @@ def addExpense():
 # ======================
 # DELETE EXPENSE
 # ======================
-def deleteExpense():
-    return "Deleted."
+def deleteExpense(expenseDesc):
+
+    with open("expenseData.json", "r") as file:
+        data = json.load(file)
+
+        expenseList = len(data)
+        data = [expense for expense in data if expense.get("description") != expenseDesc]
+
+        if len(data) == expenseList:
+            return "Expense not found."
+        
+        with open("expenseData.json", "w") as file:
+            json.dump(data, file, indent=4)
+
+    return "Expense deleted."
 
 # ======================
 # VIEW ALL EXPENSES
@@ -139,42 +126,83 @@ def calByCategory():
     return "Calculated."
 
 
-# prompt user for action
-while True:
-    print("\nWhat would you like to do?")
+# PROGRAM BEGINS
+def main():
+    # check/load user when program starts
+    loadUser()
 
-    print("1. Add an expense")
-    print("2. Delete an expense")
-    print("3. View all expenses")
-    print("4. Cal by category")
-    print("5. Exit")
+    # load expense when program starts
+    if os.path.exists("expenseData.json"):
+        try:
+            with open("expenseData.json", "r") as file:
+                data = json.load(file)
+                
+                print("Loading expenses...\n")
+                print("----------------------------------------")
+                print("| NO | DESC  |   AMOUNT   |   CATEGORY |")
+                print("----------------------------------------")
 
-    choice = int(input("\nEnter your choice: "))
 
-    if choice == 1:
-        print(addExpense())
+            for expense in data:
+                # print(f"{expense['desc']}")
+                print(f"{expense['description']}---{expense['amount']}---{expense['category']} ")
+                print(f"----------------------")
 
-    elif choice == 2:
-        print(deleteExpense())
+            print(f"TOTAL SPENT: {sum(expense['amount'] for expense in data)}")
 
-    elif choice == 3:
-        data = viewAllExpenses()
+        except json.JSONDecodeError:
+            print("Invalid json")
 
-        print("\nLoading expenses...\n")
-        print("-----------------------------------")
-        print("| DESC  |   AMOUNT   |   CATEGORY |")
-        print("-----------------------------------")
+    else:
+        data = []
 
-        for expense in data:
-            print(f"{expense['description']}---{expense['amount']}---{expense['category']} ")
-            print(f"----------------------")
+        with open("expenseData.json", "w") as file:
+            json.dump(data, file, indent=4)
 
-        print(f"TOTAL: {sum(expense['amount'] for expense in data)}")
-        
+            print("No expense found.\n")
 
-    elif choice == 4:
-        print(calByCategory())
+    # prompt user for action
+    while True:
+        print("\nWhat would you like to do?")
 
-    elif choice == 5:
-        print("\nShutting down...")
-        break
+        print("1. Add an expense")
+        print("2. Delete an expense")
+        print("3. View all expenses")
+        print("4. Calculate by category")
+        print("5. Exit")
+
+        choice = int(input("\nEnter your choice: "))
+
+        if choice == 1:
+            print(addExpense())
+
+        elif choice == 2:
+            expenseToDelete = input("Specify expense description: ")
+            print(deleteExpense(expenseToDelete))
+
+        elif choice == 3:
+            data = viewAllExpenses()
+
+            print("\nLoading expenses...\n")
+            print("----------------------------------------")
+            print("| NO | DESC  |   AMOUNT   |   CATEGORY |")
+            print("----------------------------------------")
+
+            for expense in data:
+                print(f"{expense['description']}---{expense['amount']}---{expense['category']} ")
+                print(f"----------------------")
+
+            print(f"TOTAL SPENT: {sum(expense['amount'] for expense in data)}")
+            
+
+        elif choice == 4:
+            print(calByCategory())
+
+        elif choice == 5:
+            print("\nShutting down...")
+            break
+
+
+
+if __name__ == '__main__':
+    main()

@@ -10,13 +10,14 @@
         "description": "tissue roll"
     },
     {
-        "amount": 400,
+        "amount": 200,
         "category": "food",
-        "description": "milk"
+        "description": "salt"
     },
     {
-        "amount": 30,
-        "category": "food",
-        "description": "sugar"
+        "id": "<function uuid4 at 0x75cfe47edd00>",
+        "amount": 1200,
+        "category": "transport",
+        "description": "Hub"
     }
 ]
