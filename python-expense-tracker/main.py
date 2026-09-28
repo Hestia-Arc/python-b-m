@@ -162,7 +162,6 @@ def deleteExpense(expenseIdx):
 
     return f"{deletedExpense['description']} deleted."
 
-
 # ======================
 # VIEW ALL EXPENSES
 # ======================
@@ -172,6 +171,7 @@ def viewAllExpenses():
         data = json.load(file)
 
     showExpenses(data)
+    return data
 
 # ======================
 # CAL BY CATEGORY
