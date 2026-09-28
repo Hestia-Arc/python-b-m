@@ -1,5 +1,5 @@
 import json
-from main import loadUser
+from main import loadUser, loadExpenses
 
 
 def test_loadUser_existing(tmp_path, monkeypatch):
@@ -31,5 +31,29 @@ def test_loadUser_creates(tmp_path, monkeypatch):
     assert data == {"name": "Bob", "role": "Manager"}
 
 
-def test_loadExpenses():
-    pass 
+def test_loadExpenses_existing(tmp_path, monkeypatch, capsys):
+    expenses = [
+        {"description": "Groceries", "amount": 120, "category": "Food"},
+        {"description": "Train", "amount": 30, "category": "Transport"},
+    ]
+    p = tmp_path / "expenseData.json"
+    p.write_text(json.dumps(expenses))
+    monkeypatch.chdir(tmp_path)
+
+    loadExpenses()
+
+    captured = capsys.readouterr()
+    assert "Loading expenses..." in captured.out
+    assert "Groceries" in captured.out
+    assert "TOTAL SPENT: 150" in captured.out
+
+
+def test_loadExpenses_missing(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+
+    loadExpenses()
+
+    captured = capsys.readouterr()
+    assert "No expense found." in captured.out
+    assert (tmp_path / "expenseData.json").exists()
+    assert json.loads((tmp_path / "expenseData.json").read_text()) == []
